@@ -1,0 +1,6 @@
+@WebAPI_NPD211_HostAddress = http://localhost:5077
+
+GET {{WebAPI_NPD211_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
