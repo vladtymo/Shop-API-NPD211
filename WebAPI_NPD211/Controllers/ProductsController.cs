@@ -27,7 +27,7 @@ namespace WebAPI_NPD211.Controllers
         [HttpGet]               // root/api/products
         public IActionResult Get()
         {
-            var items = context.Products .Include(x => x.Category).ToList();
+            var items = context.Products.Include(x => x.Category).ToList();
             var result = mapper.Map<IEnumerable<ProductModel>>(items);
 
             return Ok(result); // 200
