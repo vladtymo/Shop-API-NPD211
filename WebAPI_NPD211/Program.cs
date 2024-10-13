@@ -1,8 +1,11 @@
+using Core.Interfaces;
 using Core.MapperProfiles;
+using Core.Services;
 using Data;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using WebAPI_NPD211;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +27,8 @@ builder.Services.AddDbContext<ShopDbContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(AppProfile));
 
+builder.Services.AddScoped<IProductsService, ProductsService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +37,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

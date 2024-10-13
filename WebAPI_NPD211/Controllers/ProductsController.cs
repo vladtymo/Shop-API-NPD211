@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Interfaces;
 using Core.Models;
 using Core.Services;
 using Data;
@@ -13,7 +14,8 @@ namespace WebAPI_NPD211.Controllers
     [ApiController]
     public class ProductsController(
         IMapper mapper,
-        ShopDbContext context
+        ShopDbContext context,
+        IProductsService productsService
         //IFilesService filesService
         ) : ControllerBase
     {
@@ -36,12 +38,7 @@ namespace WebAPI_NPD211.Controllers
         [HttpGet("{id}")]
         public IActionResult Get([FromRoute] int id)
         {
-            var product = context.Products.Find(id);
-            if (product == null) return NotFound(); // 404
-
-            context.Entry(product).Reference(x => x.Category).Load();
-
-            return Ok(mapper.Map<ProductModel>(product));
+            return Ok(productsService.GetById(id));
         }
 
         [HttpPost]
@@ -79,10 +76,10 @@ namespace WebAPI_NPD211.Controllers
         {
             var product = context.Products.Find(id);
 
-            if (product == null) return NotFound();
+            if (product == null) throw new Exception($"Product with id {id} not found!");
 
             //if (product.ImageUrl != null)
-                //await filesService.DeleteProductImage(product.ImageUrl);
+            //await filesService.DeleteProductImage(product.ImageUrl);
 
             context.Products.Remove(product);
             context.SaveChanges();
