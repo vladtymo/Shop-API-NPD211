@@ -2,8 +2,10 @@ using Core.Interfaces;
 using Core.MapperProfiles;
 using Core.Services;
 using Data;
+using Data.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebAPI_NPD211;
 
@@ -25,9 +27,15 @@ builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssembli
 builder.Services.AddDbContext<ShopDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.AddIdentityCore<User>(options =>
+                options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ShopDbContext>();
+
 builder.Services.AddAutoMapper(typeof(AppProfile));
 
 builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<IAccountsService, AccountsService>();
 
 var app = builder.Build();
 
