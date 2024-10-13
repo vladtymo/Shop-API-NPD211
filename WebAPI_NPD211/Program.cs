@@ -50,6 +50,13 @@ app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseCors(cfg =>
+{
+    cfg.AllowAnyHeader();
+    cfg.AllowAnyMethod();
+    cfg.AllowAnyOrigin();
+});
+
 app.UseAuthorization();
 
 app.MapControllers();
