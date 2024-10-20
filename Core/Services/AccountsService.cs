@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Core.Exceptions;
 using Core.Interfaces;
 using Core.Models;
 using Data;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Net;
 
 namespace Core.Services
 {
@@ -19,7 +21,7 @@ namespace Core.Services
 
             if (user == null || !await userManager.CheckPasswordAsync(user, model.Password))
             {
-                throw new Exception("Invalid login or password.");
+                throw new HttpException("Invalid login or password.", HttpStatusCode.BadRequest);
             }
 
             await signInManager.SignInAsync(user, true);
@@ -37,7 +39,7 @@ namespace Core.Services
             var result = await userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
-                throw new Exception(result.Errors.First().Description);
+                throw new HttpException(result.Errors.First().Description, HttpStatusCode.BadRequest);
         }
     }
 
