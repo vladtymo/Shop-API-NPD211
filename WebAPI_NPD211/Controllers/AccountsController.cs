@@ -16,5 +16,19 @@ namespace WebAPI_NPD211.Controllers
             await accountsService.Register(model);
             return Ok();
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            await accountsService.Login(model);
+            return Ok();
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await accountsService.Logout();
+            return Ok();
+        }
     }
 }

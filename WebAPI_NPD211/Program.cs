@@ -7,6 +7,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using WebAPI_NPD211;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,9 +28,11 @@ builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssembli
 builder.Services.AddDbContext<ShopDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddIdentityCore<User>(options =>
+builder.Services.AddDefaultIdentity<User>(options =>
                 options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
+                //.AddDefaultTokenProviders()
+                .AddSignInManager<SignInManager<User>>()
                 .AddEntityFrameworkStores<ShopDbContext>();
 
 builder.Services.AddAutoMapper(typeof(AppProfile));
