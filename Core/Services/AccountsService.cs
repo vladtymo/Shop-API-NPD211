@@ -13,18 +13,30 @@ namespace Core.Services
         ShopDbContext context, 
         IMapper mapper,
         UserManager<User> userManager,
-        SignInManager<User> signInManager) : IAccountsService
+        SignInManager<User> signInManager,
+        IJwtService jwtService) : IAccountsService
     {
-        public async Task Login(LoginModel model)
+        public async Task<LoginResponse> Login(LoginModel model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
+            //var user = await userManager.FindByEmailAsync(model.Email);
 
-            if (user == null || !await userManager.CheckPasswordAsync(user, model.Password))
+            //if (user == null || !await userManager.CheckPasswordAsync(user, model.Password))
+            //{
+                //throw new HttpException("Invalid login or password.", HttpStatusCode.BadRequest);
+            //}
+
+            //await signInManager.SignInAsync(user, true);
+            // generate...
+            var testUser = new User()
             {
-                throw new HttpException("Invalid login or password.", HttpStatusCode.BadRequest);
-            }
+                Email = model.Email,
+                Id = "erregh-aegaerha",
+            };
 
-            await signInManager.SignInAsync(user, true);
+            return new LoginResponse()
+            {
+                AccessToken = jwtService.CreateToken(jwtService.GetClaims(testUser))
+            };
         }
 
         public async Task Logout()

@@ -4,6 +4,7 @@ using Core.Models;
 using Core.Services;
 using Data;
 using Data.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,11 +37,12 @@ namespace WebAPI_NPD211.Controllers
             return Ok(result); // 200
         }
 
-        [Authorize]
+        //[Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("{id}")]
         public IActionResult Get([FromRoute] int id)
         {
-            return Ok(productsService.GetById(id));
+            return Ok(/*productsService.GetById(id)*/);
         }
 
         [HttpPost]
